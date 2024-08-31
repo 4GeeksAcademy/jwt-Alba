@@ -26,7 +26,7 @@ CORS(api)
 
 #     return jsonify(response_body), 200
 
-        # Login
+        
 
 @api.route("/signup", methods=["POST"])
 def create_user():

@@ -2,24 +2,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			user: [],
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+
+			login: () => async (email, password) => {
+				const resp = await fetch(
+				  `https://literate-space-cod-v6wj5vxq4q5hx659-3001.app.github.dev/api/token`,
+				  {
+					mode: 'no-cors',
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email, password }),
+				  }
+				);
+		
+				if (!resp.ok) throw Error("There was a problem in the login request");
+		
+				if (resp.status === 401) {
+				  throw "Invalid credentials";
+				} else if (resp.status === 400) {
+				  throw "Invalid email or password format";
+				}
+				const data = await resp.json();
+		
+				localStorage.setItem("jwt-token", data.token);
+		
+				return data;
 			},
+
+			signup: (email, password) => {
+				fetch(
+				  `https://literate-space-cod-v6wj5vxq4q5hx659-3001.app.github.dev/api/signup`,
+				  {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email, password }),
+				  }
+				)
+				  .then((response) => {
+					if (!response.ok) {
+					  throw Error(response.status);
+					}
+					return response.json();
+				  })
+				  .then((data) => {
+					setStore({ user: data });
+				  })
+				  .catch((error) => {
+					console.log(error);
+				  });
+		
+				alert("User created successfully")
+			},
+		},
 
 			getMessage: async () => {
 				try{
@@ -49,6 +85,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			}
 		}
 	};
-};
+
 
 export default getState;
