@@ -10,7 +10,7 @@ export const Login = () => {
 
   return (
     <div className="container-fluid justify-content-center mt-4 w-25">
-      <h4 className="text-primary mb-3 text-center">Login</h4>
+      <h4 className="text-fuchsia mb-3 text-center">Login</h4>
       <form>
         <div className="form-floating mb-3">
           <input
@@ -39,7 +39,7 @@ export const Login = () => {
             onClick={(e) => {
               e.preventDefault();
               actions.login(email, password);
-              navigate("/private");
+              navigate("/information")
             }}
             type="submit"
             className="btn btn-success px-3 py-2"
